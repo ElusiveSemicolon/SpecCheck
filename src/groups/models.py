@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.utils.deconstruct import deconstructible
 from django.utils.text import slugify #remove characters that aren't alphanumeric or etc
 from django.core.urlresolvers import reverse
 
@@ -15,12 +16,23 @@ User = get_user_model() # call things off current user session
 from django import template
 register = template.Library()
 
+@deconstructible
+class Game(models.Model):
+    id = models.IntegerField(blank=True, primary_key=True)
+    name = models.TextField(blank=True)
+    year = models.TextField(blank=True)
+    url = models.URLField(blank=True)
+
+    def __str__(self):
+        return '%s (%s)' % (self.name, self.year)
+
 class Group(models.Model):
     name = models.CharField(max_length=255,unique=True)
     slug = models.SlugField(allow_unicode=True,unique=True) #dont want url group slug and name to overlap
     description = models.TextField(blank=True,default='')
     description_html = models.TextField(editable=False,default='',blank=True)
     members = models.ManyToManyField(User,through='GroupMember')
+    game = models.ForeignKey(Game, related_name='posts', null=True, blank=True)
 
     def __str__(self):
         return self.name

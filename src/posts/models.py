@@ -6,13 +6,16 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 
 import misaka
+from django.utils.deconstruct import deconstructible
 
 from groups.models import Group
+
 
 # Create your models here.
 
 from django.contrib.auth import get_user_model
 User = get_user_model() #connect current post to current username
+
 
 class Post(models.Model):
     user = models.ForeignKey(User,related_name='posts')
