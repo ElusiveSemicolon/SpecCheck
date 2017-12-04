@@ -22,6 +22,7 @@ class Game(models.Model):
     name = models.TextField(blank=True)
     year = models.TextField(blank=True)
     url = models.URLField(blank=True)
+    cover_url = models.URLField(blank=True)
 
     def __str__(self):
         return '%s (%s)' % (self.name, self.year)

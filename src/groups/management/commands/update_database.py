@@ -21,10 +21,10 @@ class Command(BaseCommand):
 
         i = 0
         content = []
-        while i < 24000:
+        while i < 1000:
             result = igdb.games({
                 'ids': games[i + 1:min(i + 1000, 23769)],
-                'fields': ['name', 'first_release_date', 'url'],
+                'fields': ['name', 'first_release_date', 'url', 'cover'],
             })
             content += (ast.literal_eval(result.content))
             i += 1000
@@ -32,7 +32,11 @@ class Command(BaseCommand):
         for game in content:
             try:
                 game['year'] = convert_release_date(game['first_release_date'])
-                g = Game(id=game['id'], name=game['url'], year=game['year'], url = game['url'])
+                g = Game(id=game['id'], name=game['name'], year=game['year'], url = game['url'])
             except KeyError:
                 g = Game(id=game['id'], name=game['name'], url = game['url'])
+            try:
+                g.cover_url = game['cover']['url'][2:]
+            except KeyError:
+                pass
             g.save()
