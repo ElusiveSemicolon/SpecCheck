@@ -13,7 +13,8 @@ class UserCreateForm(UserCreationForm):
         self.fields['username'].label= 'Display Name'
         self.fields['email'].label= "Email Address"
         self.fields['os'].label = 'Operating System'
-        self.fields['gpu'].label = 'Central Processing Unit'
+        self.fields['gpu'].label = 'Graphics Card'
+        self.fields['cpu'].label = 'Central Processing Unit'
         self.fields['ram'].label = 'RAM'
         self.fields['ssd'].label = 'Solid State Drive'
         self.fields['hdd'].label = 'Hard Disk Drive'
