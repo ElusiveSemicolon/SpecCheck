@@ -34,15 +34,16 @@
     {% for group in object_list %}
     <a class='list-group-item' href="{% url 'groups:single' slug=group.slug %}">
       <h3 class='title list-group-item-heading'>{{group.name}}</h3>
-        <h4 class="title list-group-item-heading">{{ group.game.year }}</h4>
+        <h4 class="title list-group-item-heading"><button>-</button>        {{ group.game.year }}</h4>
+
       <div class="list-group-item-text container-fluid">
         {{group.description_html|safe}}
-
+       </div>
           <div class="row">
           <div class="col-md-4">
             <img src="{{ group.game.cover_url }}" class="img-responsive"><img>
           </div>
-            <div class="col-md-8">
+            <div class="col-md-8" >
             <p class="title list-group-item-text">
                 {{ group.game.summary }}
             </p>
@@ -53,7 +54,7 @@
 
 
 
-      </div>
+
     <div class="row">
             <div class="col-md-4">
                 <span class ='badge'>{{group.members.count}}</span>

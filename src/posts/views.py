@@ -21,15 +21,7 @@ User = get_user_model()
 class PostList(SelectRelatedMixin,generic.ListView):
     model = models.Post
     select_related = ('user','group')
-    bob = 'ross'
 
-    def groups(self):
-        return models.Group.objects.filter(members__username__contains=self.request.user.username).all()
-
-    def get_context_data(self,**kwargs):
-        context=super(UserPosts,self).get_context_data(**kwargs)
-        context['bob'] = 'ross'
-        return context
 
 #shows a specific post
 class UserPosts(generic.ListView):
@@ -48,6 +40,11 @@ class UserPosts(generic.ListView):
     def get_context_data(self,**kwargs):
         context=super(UserPosts,self).get_context_data(**kwargs)
         context['post_user'] = self.post_user
+        names = ['Operating System', 'Graphics Card', 'Monitor', 'CPU', 'RAM', 'SSD', 'HDD']
+        flds = ['os', 'gpu', 'monitor', 'cpu', 'ram', 'ssd', 'hdd']
+        vals = [getattr(self.post_user.profile, x) for x in flds]
+        context['profile'] = zip(names,flds,vals)
+        context['is_user'] = self.post_user.id == self.request.user.id
         return context
 
 

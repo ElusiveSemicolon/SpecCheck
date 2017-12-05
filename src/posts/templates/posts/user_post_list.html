@@ -1,12 +1,27 @@
 {% extends "posts/post_base.html" %}
+{% load bootstrap3 %}
 
 {% block prepost %}
 
-<div class="col-md-4">
+
+<div class="col-md-4 bg-info">
   <h1>@{{post_user.username}}</h1>
-    {% for group in view.groups %}
-        <ul>{{ group.name }}</ul>
+    <form>
+    {% for item in profile %}
+        {% if is_user %}
+            <div class="form-group">
+                <label>{{ item.0 }}</label>
+                <small hidden>Changed</small>
+                <input id = "{{ item.1 }}" class="form-control" type="text" value="{{ item.2 }}">
+            </div>
+        {% else %}
+            <div class="form-group">
+                <label>{{ item.0 }}</label>
+                <p id = "{{ item.1 }}" class="form-control-static">{{ item.2 }}</p>
+            </div>
+        {% endif %}
     {%  endfor %}
+    </form>
 </div>
 
 
@@ -30,5 +45,34 @@
   {% endfor %}
 
 </div>
+
+{% block javascript %}
+<!-- Jquery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="application/javascript">
+    $(function(ready) {
+        $("input").change(function () {
+            var attr = $(this).attr('id');
+            var new_val = $(this).val();
+
+
+            $.ajax({
+            url: '{% url "profiles:update_info" %}',
+            data: {
+              'attr': attr,
+                'new_val' : new_val
+            },
+            dataType: 'json',
+
+          });
+            cl = $(this).parent().attr('class');
+            if (cl.indexOf('has')==-1){
+                $(this).parent().attr('class', cl + ' has-warning has-feedback"')
+            }
+
+        });
+    });
+</script>
+{% endblock %}
 
 {% endblock %}
