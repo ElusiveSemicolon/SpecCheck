@@ -4,7 +4,9 @@
 
 <div class="col-md-4">
   <h1>@{{post_user.username}}</h1>
-
+    {% for group in view.groups %}
+        <ul>{{ group.name }}</ul>
+    {%  endfor %}
 </div>
 
 
@@ -15,7 +17,16 @@
 {% block post_content %}
 <div class="col-md-8">
   {% for post in post_list %}
-  {% include "posts/_post.html" %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <a href="{% url 'groups:single' slug=post.group.slug %}">
+            <h3>{{ post.group.name }}</h3>
+        </a>
+    </div>
+    <div class="panel-body">
+    {% include "posts/_post.html" %}
+    </div>
+  </div>
   {% endfor %}
 
 </div>

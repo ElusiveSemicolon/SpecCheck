@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from sqlite3 import IntegrityError
+
+from django import forms
 from django.shortcuts import render
 
-# Create your views here.
+
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.core.urlresolvers import reverse
 from django.views import generic
@@ -13,10 +16,30 @@ from django.contrib import messages
 from . import models
 from groups.models import Group,GroupMember
 
+# from dal import autocomplete
+from chosen import forms as chosenforms
+from django.contrib.admin import widgets
+
+# Create your views here.
+
+# class GameAutocomplete(autocomplete.Select2QuerySetView):
+#     def get_queryset(self):
+#         # Don't forget to filter out results depending on the visitor !
+#         if not self.request.user.is_authenticated():
+#             return models.Game.objects.none()
+#
+#         qs = models.Game.objects.all()
+#
+#         if self.q:
+#             qs = qs.filter(name__istartswith=self.q)
+#
+#         return qs
+
 
 class CreateGroup(LoginRequiredMixin,generic.CreateView):
-    fields = ('name','description')
     model = Group
+    fields = ('game', 'description')
+
 
 
 class SingleGroup(generic.DetailView):
@@ -61,3 +84,5 @@ class LeaveGroup(LoginRequiredMixin,generic.RedirectView):
             membership.delete()
             messages.success(self.request,'You have left the group!')
         return super(LeaveGroup,self).get(request,*args,**kwargs)
+
+

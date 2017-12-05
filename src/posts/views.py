@@ -21,6 +21,15 @@ User = get_user_model()
 class PostList(SelectRelatedMixin,generic.ListView):
     model = models.Post
     select_related = ('user','group')
+    bob = 'ross'
+
+    def groups(self):
+        return models.Group.objects.filter(members__username__contains=self.request.user.username).all()
+
+    def get_context_data(self,**kwargs):
+        context=super(UserPosts,self).get_context_data(**kwargs)
+        context['bob'] = 'ross'
+        return context
 
 #shows a specific post
 class UserPosts(generic.ListView):
@@ -50,10 +59,16 @@ class PostDetail(SelectRelatedMixin,generic.DetailView):
         queryset=super(PostDetail,self).get_queryset()
         return queryset.filter(user__username__iexact=self.kwargs.get('username'))
 
-class CreatePost(LoginRequiredMixin,SelectRelatedMixin,generic.CreateView):
 
-    fields=('message','group')
+class CreatePost(LoginRequiredMixin,SelectRelatedMixin,generic.CreateView):
+    form_class = forms.PostForm
+    #filter(members__username__contains=User.username)
     model = models.Post
+
+    def get_form_kwargs(self):
+        kwargs = super(CreatePost, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self,form):
         self.object = form.save(commit=False)
