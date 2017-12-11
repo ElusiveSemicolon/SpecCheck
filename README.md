@@ -17,6 +17,13 @@ $ pip install django-select2
 $ pip install django-select2-forms
 $ pip install django-chosen
 $ pip install django-simple-autocomplete
+$ pip install igdb-api-python
+```
+
+If game database is empty, install igdb-api-python and then run:
+
+```bash
+$ python manage.py update_database
 ```
 
 
