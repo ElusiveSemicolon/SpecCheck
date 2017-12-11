@@ -10,4 +10,6 @@ class PostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
        user = kwargs.pop('user')
        super(PostForm, self).__init__(*args, **kwargs)
+       self.fields['message'].required = True
+       self.fields['group'].required = True
        self.fields['group'].queryset = Group.objects.filter(members__username__contains=user.username)
