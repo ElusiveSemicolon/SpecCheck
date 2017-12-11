@@ -14,7 +14,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages
 
 from . import models
-from groups.models import Group,GroupMember
+from models import Group,GroupMember
 
 # from dal import autocomplete
 from chosen import forms as chosenforms
